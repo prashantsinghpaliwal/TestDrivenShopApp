@@ -1,4 +1,4 @@
-package me.prashant.testdrivenshop.ui.theme
+package me.prashant.testdrivenshop.presentation.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
