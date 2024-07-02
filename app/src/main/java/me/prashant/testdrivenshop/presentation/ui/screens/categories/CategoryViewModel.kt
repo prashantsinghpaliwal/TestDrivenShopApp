@@ -1,7 +1,5 @@
-package me.prashant.testdrivenshop.presentation.category
+package me.prashant.testdrivenshop.presentation.ui.screens.categories
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel

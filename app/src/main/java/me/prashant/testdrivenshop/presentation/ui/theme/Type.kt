@@ -40,13 +40,13 @@ val Typography =
         headlineLarge =
             TextStyle(
                 fontFamily = CustomFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 32.sp,
             ),
         headlineMedium =
             TextStyle(
                 fontFamily = CustomFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.SemiBold,
                 fontSize = 28.sp,
             ),
         headlineSmall =
@@ -58,13 +58,13 @@ val Typography =
         titleLarge =
             TextStyle(
                 fontFamily = CustomFontFamily,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 fontSize = 22.sp,
             ),
         titleMedium =
             TextStyle(
                 fontFamily = CustomFontFamily,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
             ),
         titleSmall =

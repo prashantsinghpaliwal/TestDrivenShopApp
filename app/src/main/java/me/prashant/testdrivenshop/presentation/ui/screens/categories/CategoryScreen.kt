@@ -1,13 +1,10 @@
 package me.prashant.testdrivenshop.presentation.ui.screens.categories
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,17 +18,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.prashant.testdrivenshop.R
-import me.prashant.testdrivenshop.presentation.category.CategoryViewModel
+import me.prashant.testdrivenshop.presentation.model.CategoryUIModel
 import me.prashant.testdrivenshop.presentation.states.CategoryScreenViewState
 import me.prashant.testdrivenshop.presentation.ui.screens.common.CustomToolbar
 import me.prashant.testdrivenshop.presentation.ui.screens.common.SearchBar
-import me.prashant.testdrivenshop.presentation.ui.theme.TestDrivenShopTheme
 
 @Composable
-fun CategoryScreen(viewModel: CategoryViewModel = hiltViewModel()) {
+fun CategoryScreen(
+    viewModel: CategoryViewModel = hiltViewModel(),
+    onCategorySelected: (CategoryUIModel, List<CategoryUIModel>) -> Unit,
+) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.getCategories()
@@ -47,54 +45,52 @@ fun CategoryScreen(viewModel: CategoryViewModel = hiltViewModel()) {
                 onRightIconClick = { /* Handle right icon click */ },
             )
         },
-    ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)) {
-            var query by remember { mutableStateOf("") }
+    ) { paddingValues ->
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(paddingValues),
+        ) {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxSize(),
+            ) {
+                var query by remember { mutableStateOf("") }
 
-            SearchBar(
-                query = query,
-                onQueryChanged = { query = it },
-                onSearchClicked = { /* Handle search clicked */ },
-            )
+                SearchBar(
+                    query = query,
+                    onQueryChanged = { query = it },
+                    onSearchClicked = { /* Handle search clicked */ },
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                when (state) {
+                    is CategoryScreenViewState.Loading -> {
+                        // Show loading UI
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    }
 
-            when (state) {
-                is CategoryScreenViewState.Loading -> {
-                    // Show loading UI
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                }
-
-                is CategoryScreenViewState.Success -> {
-                    val categories = (state as CategoryScreenViewState.Success).categories
-
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        items(categories.size) { pos ->
-                            CategoryCard(
-                                title = categories[pos].name,
-                                subtitle = categories[pos].slug,
-                                onClick = { /* Handle category click */ },
-                            )
+                    is CategoryScreenViewState.Success -> {
+                        val categories = (state as CategoryScreenViewState.Success).categories
+                        CategoryList(categories = categories) { selectedCategory ->
+                            onCategorySelected(selectedCategory, categories)
                         }
                     }
-                }
 
-                is CategoryScreenViewState.Error -> {
-                    val message = (state as CategoryScreenViewState.Error).error
-                    Text(
-                        text = message,
-                        color = Color.Red,
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                    )
-                }
+                    is CategoryScreenViewState.Error -> {
+                        val message = (state as CategoryScreenViewState.Error).error
+                        Text(
+                            text = message,
+                            color = Color.Red,
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                        )
+                    }
 
-                else -> {
-                    // Show idle or initial UI
+                    else -> {
+                        // Show idle or initial UI
+                    }
                 }
             }
         }

@@ -37,7 +37,7 @@ fun CustomToolbar(
             .fillMaxWidth()
             .height(80.dp)
             .background(Color.White)
-            .padding(top = 24.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 24.dp, start = 12.dp, end = 12.dp),
         contentAlignment = Alignment.Center
     ) {
         Spacer(modifier = Modifier.height(24.dp))
