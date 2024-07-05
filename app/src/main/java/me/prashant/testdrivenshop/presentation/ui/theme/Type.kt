@@ -76,7 +76,7 @@ val Typography =
         bodyLarge =
             TextStyle(
                 fontFamily = CustomFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
             ),
         bodyMedium =

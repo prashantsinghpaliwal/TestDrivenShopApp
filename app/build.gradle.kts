@@ -110,6 +110,9 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
+    // Coil
+    implementation(libs.coil.compose)
+
     // Unit Testing
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

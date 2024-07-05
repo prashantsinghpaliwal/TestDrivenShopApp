@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import me.prashant.testdrivenshop.presentation.model.CategoryUIModel
 import me.prashant.testdrivenshop.presentation.ui.screens.categories.CategoryScreen
+import me.prashant.testdrivenshop.presentation.ui.screens.detail.ProductDetailScreen
 import me.prashant.testdrivenshop.presentation.ui.screens.listing.ProductListingScreen
 
 sealed class Screen(
@@ -25,6 +26,8 @@ sealed class Screen(
             categoryList: String,
         ) = "product_listing_screen/$selectedCategory/$categoryList"
     }
+
+    data object ProductDetailScreen : Screen("product_detail_screen")
 }
 
 @Composable
@@ -65,7 +68,13 @@ fun SetupNavGraph(navController: NavHostController) {
                     object : TypeToken<List<CategoryUIModel>>() {}.type,
                 )
 
-            ProductListingScreen(selectedCategory = selectedCategory, categories = categoryList)
+            ProductListingScreen(selectedCategory = selectedCategory, categories = categoryList) {
+                navController.navigate(Screen.ProductDetailScreen.route)
+            }
+        }
+
+        composable(route = Screen.ProductDetailScreen.route) {
+            ProductDetailScreen()
         }
     }
 }

@@ -56,7 +56,6 @@ fun CustomToolbar(
             Text(
                 text = title.uppercase(),
                 style = Typography.titleLarge,
-                modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
             )
 

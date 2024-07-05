@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import me.prashant.testdrivenshop.domain.usecase.category.GetCategoriesUseCase
-import me.prashant.testdrivenshop.presentation.mapper.CategoryUIModelMapper
-import me.prashant.testdrivenshop.presentation.states.CategoryScreenViewState
+import me.prashant.testdrivenshop.domain.usecase.productlisting.GetProductListingUseCase
+import me.prashant.testdrivenshop.presentation.mapper.ProductUIModelMapper
+import me.prashant.testdrivenshop.presentation.model.ProductUIModel
+import me.prashant.testdrivenshop.presentation.states.ProductListingScreenViewState
 import me.prashant.testdrivenshop.util.Resource
 import javax.inject.Inject
 
@@ -17,43 +17,44 @@ import javax.inject.Inject
 class ProductViewModel
     @Inject
     constructor(
-        private val useCase: GetCategoriesUseCase,
-        private val uiModelMapper: CategoryUIModelMapper,
+        private val useCase: GetProductListingUseCase,
+        private val uiModelMapper: ProductUIModelMapper,
     ) : ViewModel() {
-        private val _state = MutableStateFlow<CategoryScreenViewState>(CategoryScreenViewState.Idle)
-        val state: StateFlow<CategoryScreenViewState> = _state
+        private val _state =
+            MutableStateFlow<ProductListingScreenViewState>(ProductListingScreenViewState.Idle)
+        val state: StateFlow<ProductListingScreenViewState> = _state
 
-        fun getCategories() {
-            _state.value = CategoryScreenViewState.Loading(true)
-
+        fun getProductListing(categoryId: String) {
             viewModelScope.launch {
-                useCase
-                    .invoke()
-                    .catch {
-                        _state.value = CategoryScreenViewState.Error(it.message ?: "An error occurred")
-                    }.collect {
-                        when (it) {
-                            is Resource.Loading -> {
-                                _state.value = CategoryScreenViewState.Loading(it.isLoading)
-                            }
+                useCase.invoke(categoryId).collect {
+                    when (it) {
+                        is Resource.Loading -> {
+                            _state.value = ProductListingScreenViewState.Loading(it.isLoading)
+                        }
 
-                            is Resource.Success -> {
-                                val uiModelList =
-                                    it.data.map {
-                                        uiModelMapper.convert(it)
-                                    }
+                        is Resource.Success -> {
+                            _state.value =
+                                ProductListingScreenViewState.Success(
+                                    ProductUIModel(
+                                        limit = it.data.limit,
+                                        products =
+                                            it.data.products.map { product ->
+                                                uiModelMapper.convert(product)
+                                            },
+                                        skip = it.data.skip,
+                                        total = it.data.total,
+                                    ),
+                                )
+                        }
 
-                                _state.value = CategoryScreenViewState.Success(uiModelList)
-                            }
-
-                            is Resource.Error -> {
-                                _state.value =
-                                    CategoryScreenViewState.Error(
-                                        it.exception.message ?: "An error occurred",
-                                    )
-                            }
+                        is Resource.Error -> {
+                            _state.value =
+                                ProductListingScreenViewState.Error(
+                                    it.exception.message ?: "Something went wrong",
+                                )
                         }
                     }
+                }
             }
         }
     }
