@@ -33,7 +33,5 @@ class ProductListingRepositoryImpl
                 } catch (e: Exception) {
                     emit(Resource.Error(Exception(e.localizedMessage ?: "An error occurred"))) // Error state
                 }
-
-//                emit(Resource.Loading(false)) // Final loading state
             }
     }
