@@ -1,5 +1,6 @@
 package me.prashant.testdrivenshop.data.repo
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import me.prashant.testdrivenshop.data.mapper.ProductItemDTOToProductItemMapper
@@ -17,24 +18,22 @@ class ProductListingRepositoryImpl
     ) : ProductListingRepository {
         override fun getProductListings(category: String): Flow<Resource<Product>> =
             flow {
-                emit(Resource.Loading(true))
+                emit(Resource.Loading(true)) // Initial loading state
 
                 try {
                     val result = apiService.getProducts(category)
-                    val product =
-                        Product(
-                            limit = result.limit,
-                            products =
-                                result.products.map {
-                                    productItemMapper.convert(it)
-                                },
-                            skip = result.skip,
-                            total = result.total,
-                        )
+                    val product = Product(
+                        limit = result.limit,
+                        products = result.products.map { productItemMapper.convert(it) },
+                        skip = result.skip,
+                        total = result.total,
+                    )
 
-                    emit(Resource.Success(product))
+                    emit(Resource.Success(product)) // Success state
                 } catch (e: Exception) {
-                    emit(Resource.Error(Exception(e.localizedMessage ?: "An error occurred")))
+                    emit(Resource.Error(Exception(e.localizedMessage ?: "An error occurred"))) // Error state
                 }
+
+//                emit(Resource.Loading(false)) // Final loading state
             }
     }

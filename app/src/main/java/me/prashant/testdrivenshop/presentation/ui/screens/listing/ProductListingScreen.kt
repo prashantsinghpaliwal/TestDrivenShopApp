@@ -1,5 +1,6 @@
 package me.prashant.testdrivenshop.presentation.ui.screens.listing
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +29,8 @@ fun ProductListingScreen(
     viewModel: ProductViewModel = hiltViewModel(),
     onProductItemClick: (ProductItemUIModel) -> Unit,
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState(initial = ProductListingScreenViewState.Loading(true))
+
     LaunchedEffect(Unit) {
         viewModel.getProductListing(selectedCategory.slug)
     }
@@ -51,26 +53,33 @@ fun ProductListingScreen(
                     .background(Color.White)
                     .padding(paddingValues),
         ) {
+            Log.e("ProductListing", "ProductListingScreen $state")
             when (state) {
                 is ProductListingScreenViewState.Loading -> {
-                    val s = state as ProductListingScreenViewState.Loading
-                    if (s.isLoading) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    val loadingState = state as ProductListingScreenViewState.Loading
+                    if (loadingState.isLoading) {
+                        CircularProgressIndicator(
+                            modifier =
+                                Modifier.align(
+                                    Alignment.Center,
+                                ),
+                            color = Color.Black,
+                        )
                     }
                 }
 
                 is ProductListingScreenViewState.Success -> {
-                    val products =
-                        (state as ProductListingScreenViewState.Success).productUIModel.products
+                    val successState = state as ProductListingScreenViewState.Success
+                    val products = successState.productUIModel.products
                     ProductList(products = products) {
                         onProductItemClick.invoke(it)
                     }
                 }
 
                 is ProductListingScreenViewState.Error -> {
-                    val message = (state as ProductListingScreenViewState.Error).message
+                    val errorState = state as ProductListingScreenViewState.Error
                     Text(
-                        text = message,
+                        text = errorState.message,
                         color = Color.Red,
                         modifier = Modifier.align(Alignment.Center),
                     )

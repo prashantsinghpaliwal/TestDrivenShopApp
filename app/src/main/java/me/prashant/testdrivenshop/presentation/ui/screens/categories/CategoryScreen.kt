@@ -69,7 +69,10 @@ fun CategoryScreen(
                 when (state) {
                     is CategoryScreenViewState.Loading -> {
                         // Show loading UI
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            color = Color.Black,
+                        )
                     }
 
                     is CategoryScreenViewState.Success -> {
