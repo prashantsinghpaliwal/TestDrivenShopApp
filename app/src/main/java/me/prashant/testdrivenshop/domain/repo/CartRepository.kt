@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import me.prashant.testdrivenshop.domain.model.CartItemDomainModel
 
 interface CartRepository {
-    suspend fun addCartItem(cartItem: CartItemDomainModel)
+    suspend fun addCartItem(cartItem: CartItemDomainModel): Flow<Boolean>
 
     suspend fun getCartItems(): Flow<List<CartItemDomainModel>>
 

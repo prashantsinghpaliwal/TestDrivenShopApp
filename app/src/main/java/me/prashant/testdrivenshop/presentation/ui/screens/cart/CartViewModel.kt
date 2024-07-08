@@ -50,7 +50,10 @@ class CartViewModel
 
         fun addToCart(cartItem: CartItemUIModel) {
             viewModelScope.launch {
-                cartUseCase.addToCartUseCase.invoke(uiToDomainMapper.convert(cartItem))
+                val result = cartUseCase.addToCartUseCase.invoke(uiToDomainMapper.convert(cartItem))
+                result.collect {
+                    _state.value = CartScreenViewState.AddToCartSuccess(it)
+                }
             }
         }
 

@@ -20,4 +20,8 @@ sealed class CartScreenViewState {
     data class CartItemCountSuccess(
         val count: Int,
     ) : CartScreenViewState()
+
+    data class AddToCartSuccess(
+        val success: Boolean,
+    ) : CartScreenViewState()
 }

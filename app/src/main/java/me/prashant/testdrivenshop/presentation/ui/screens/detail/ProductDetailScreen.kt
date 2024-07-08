@@ -42,6 +42,7 @@ fun ProductDetailScreen(
     onBackClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
+    val cartState by cartViewModel.state.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.getProductDetail(productId.toString())
     }
@@ -79,6 +80,7 @@ fun ProductDetailScreen(
                     ProductImage(backgroundColor, product)
                     ProductDetail(
                         product,
+                        cartState,
                         onAddToCartClick = {
                             cartViewModel.addToCart(
                                 CartItemUIModel(

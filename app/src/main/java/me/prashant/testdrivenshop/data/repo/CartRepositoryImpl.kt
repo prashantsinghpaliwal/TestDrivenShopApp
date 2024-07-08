@@ -1,6 +1,7 @@
 package me.prashant.testdrivenshop.data.repo
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import me.prashant.testdrivenshop.data.local.room.CartDao
 import me.prashant.testdrivenshop.data.mapper.CartItemDomainToEntityMapper
@@ -16,9 +17,11 @@ class CartRepositoryImpl
         private val cartItemDomainToEntityMapper: CartItemDomainToEntityMapper,
         private val cartItemEntityToDomainMapper: CartItemEntityToDomainMapper,
     ) : CartRepository {
-        override suspend fun addCartItem(cartItem: CartItemDomainModel) {
-            cartDao.insertCartItem(cartItemDomainToEntityMapper.convert(cartItem))
-        }
+        override suspend fun addCartItem(cartItem: CartItemDomainModel): Flow<Boolean> =
+            flow {
+                cartDao.insertCartItem(cartItemDomainToEntityMapper.convert(cartItem))
+                emit(true)
+            }
 
         override suspend fun getCartItems(): Flow<List<CartItemDomainModel>> {
             val result =

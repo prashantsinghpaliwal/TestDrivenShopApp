@@ -25,10 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.prashant.testdrivenshop.R
 import me.prashant.testdrivenshop.presentation.model.ProductItemUIModel
+import me.prashant.testdrivenshop.presentation.states.CartScreenViewState
 
 @Composable
-fun ProductDetail(product: ProductItemUIModel,
-                  onAddToCartClick: () -> Unit) {
+fun ProductDetail(
+    product: ProductItemUIModel,
+    cartScreenViewState: CartScreenViewState,
+    onAddToCartClick: () -> Unit,
+) {
     Column(
         modifier =
             Modifier
@@ -79,8 +83,27 @@ fun ProductDetail(product: ProductItemUIModel,
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom,
         ) {
+            val isAlreadyAddedToCart: Boolean
+            val buttonText: String
+
+            when (cartScreenViewState) {
+                is CartScreenViewState.AddToCartSuccess -> {
+                    isAlreadyAddedToCart = true
+                    buttonText = "Added to Cart"
+                }
+
+                else -> {
+                    isAlreadyAddedToCart = false
+                    buttonText = "Add to Cart"
+                }
+            }
+
             Button(
-                onClick = { onAddToCartClick() },
+                onClick = {
+                    if (!isAlreadyAddedToCart) {
+                        onAddToCartClick()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(12.dp),
                 modifier =
@@ -89,7 +112,7 @@ fun ProductDetail(product: ProductItemUIModel,
                         .height(56.dp),
             ) {
                 Text(
-                    text = "Add to Cart",
+                    text = buttonText,
                     style = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp),
                     color = Color(0xFFFDFDFD),
                 )
