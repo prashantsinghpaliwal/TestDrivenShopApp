@@ -3,11 +3,11 @@
 ## Screenshots
 
 <p align="center">
-  <img src="images/01.png" alt="Image 1" width="300" height="600">
-  <img src="images/02.png" alt="Image 2" width="300" height="600">
-  <img src="images/03.png" alt="Image 3" width="300" height="600">
-  <img src="images/04.png" alt="Image 4" width="300" height="600">
-  <img src="images/05.png" alt="Image 5" width="300" height="600">
+  <img src="images/01.png" alt="Image 1" width="250" height="500">
+  <img src="images/02.png" alt="Image 2" width="250" height="500">
+  <img src="images/03.png" alt="Image 3" width="250" height="500">
+  <img src="images/04.png" alt="Image 4" width="250" height="500">
+  <img src="images/05.png" alt="Image 5" width="250" height="500">
 </p>
 
 
