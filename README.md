@@ -60,7 +60,7 @@ We used libraries such as Mockk for mocking dependencies, and Turbine for testin
 - **di**: Dependency injection setup using Hilt.
 - **utils**: Utility classes and extension functions.
 
-🚧 This project is a **work in progress (WIP)** and may not be fully functional. Some features might not work as improvements and features are being added regularly. 🚧
+🚧 This project is a **work in progress (WIP)**. Some features might not work as improvements and features are being added regularly. 🚧
 
 ## Conclusion
 
