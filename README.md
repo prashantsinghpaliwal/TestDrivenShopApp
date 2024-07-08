@@ -3,10 +3,11 @@
 ## Screenshots
 
 <p align="center">
-  <img src="path/to/image1.png" alt="Image 1" width="200" height="400">
-  <img src="path/to/image2.png" alt="Image 2" width="200" height="400">
-  <img src="path/to/image3.png" alt="Image 3" width="200" height="400">
-  <img src="path/to/image4.png" alt="Image 4" width="200" height="400">
+  <img src="images/01.png" alt="Image 1" width="300" height="600">
+  <img src="images/02.png" alt="Image 2" width="300" height="600">
+  <img src="images/03.png" alt="Image 3" width="300" height="600">
+  <img src="images/04.png" alt="Image 4" width="300" height="600">
+  <img src="images/05.png" alt="Image 5" width="300" height="600">
 </p>
 
 
@@ -58,6 +59,8 @@ We used libraries such as Mockk for mocking dependencies, and Turbine for testin
   - **mapper**: Mappers to transform domain models to UI models.
 - **di**: Dependency injection setup using Hilt.
 - **utils**: Utility classes and extension functions.
+
+🚧 This project is a **work in progress (WIP)** and may not be fully functional. Some features might not work as improvements and features are being added regularly. 🚧
 
 ## Conclusion
 
