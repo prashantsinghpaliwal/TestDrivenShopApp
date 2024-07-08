@@ -6,7 +6,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import me.prashant.testdrivenshop.data.mapper.ProductItemDTOToProductItemMapper
-import me.prashant.testdrivenshop.data.network.ProductListingApiService
+import me.prashant.testdrivenshop.data.network.ProductApiService
 import me.prashant.testdrivenshop.data.remote.ProductDTO
 import me.prashant.testdrivenshop.domain.model.Product
 import me.prashant.testdrivenshop.domain.model.ProductItem
@@ -15,14 +15,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class ProductListingRepositoryImplTest {
-    private lateinit var repository: ProductListingRepositoryImpl
-    private val apiService: ProductListingApiService = mockk()
+class ProductRepositoryImplTest {
+    private lateinit var repository: ProductRepositoryImpl
+    private val apiService: ProductApiService = mockk()
     private val productItemMapper: ProductItemDTOToProductItemMapper = mockk()
 
     @Before
     fun setUp() {
-        repository = ProductListingRepositoryImpl(apiService, productItemMapper)
+        repository = ProductRepositoryImpl(apiService, productItemMapper)
     }
 
     @Test

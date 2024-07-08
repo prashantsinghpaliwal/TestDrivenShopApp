@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import me.prashant.testdrivenshop.presentation.model.CategoryUIModel
+import me.prashant.testdrivenshop.presentation.ui.screens.cart.CartScreen
 import me.prashant.testdrivenshop.presentation.ui.screens.categories.CategoryScreen
 import me.prashant.testdrivenshop.presentation.ui.screens.detail.ProductDetailScreen
 import me.prashant.testdrivenshop.presentation.ui.screens.listing.ProductListingScreen
@@ -27,26 +27,55 @@ sealed class Screen(
         ) = "product_listing_screen/$selectedCategory/$categoryList"
     }
 
-    data object ProductDetailScreen : Screen("product_detail_screen")
+    data object ProductDetailScreen : Screen("productDetail/{productId}") {
+        fun createRoute(productId: Int) = "productDetail/$productId"
+    }
+
+    data object CartScreen : Screen("cart")
 }
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
+    val onCartClicked =
+        object : () -> Unit {
+            override fun invoke() {
+                navController.navigate(Screen.CartScreen.route)
+            }
+        }
+
     NavHost(
         navController = navController,
         startDestination = Screen.CategoryScreen.route,
     ) {
         composable(route = Screen.CategoryScreen.route) {
-            CategoryScreen { selectedCategory, categoryList ->
-                val selectedCategoryJson = Uri.encode(Gson().toJson(selectedCategory))
-                val categoryListJson = Uri.encode(Gson().toJson(categoryList))
-                navController.navigate(
-                    Screen.ProductListingScreen.createRoute(
-                        selectedCategoryJson,
-                        categoryListJson,
-                    ),
-                )
-            }
+//            CategoryScreen { selectedCategory, categoryList ->
+//                val selectedCategoryJson = Uri.encode(Gson().toJson(selectedCategory))
+//                val categoryListJson = Uri.encode(Gson().toJson(categoryList))
+//                navController.navigate(
+//                    Screen.ProductListingScreen.createRoute(
+//                        selectedCategoryJson,
+//                        categoryListJson,
+//                    ),
+//                )
+//            }
+            val categorySelected =
+                object : (CategoryUIModel, List<CategoryUIModel>) -> Unit {
+                    override fun invoke(
+                        selectedCategory: CategoryUIModel,
+                        categoryList: List<CategoryUIModel>,
+                    ) {
+                        val selectedCategoryJson = Uri.encode(Gson().toJson(selectedCategory))
+                        val categoryListJson = Uri.encode(Gson().toJson(categoryList))
+                        navController.navigate(
+                            Screen.ProductListingScreen.createRoute(
+                                selectedCategoryJson,
+                                categoryListJson,
+                            ),
+                        )
+                    }
+                }
+
+            CategoryScreen(onCategorySelected = categorySelected, onCartClicked = onCartClicked)
         }
 
         composable(
@@ -58,23 +87,33 @@ fun SetupNavGraph(navController: NavHostController) {
                 ),
         ) { backStackEntry ->
             val selectedCategoryJson = backStackEntry.arguments?.getString("selectedCategory")
-            val categoryListJson = backStackEntry.arguments?.getString("categoryList")
-
             val selectedCategory: CategoryUIModel =
                 Gson().fromJson(selectedCategoryJson, CategoryUIModel::class.java)
-            val categoryList: List<CategoryUIModel> =
-                Gson().fromJson(
-                    categoryListJson,
-                    object : TypeToken<List<CategoryUIModel>>() {}.type,
-                )
 
-            ProductListingScreen(selectedCategory = selectedCategory, categories = categoryList) {
-                navController.navigate(Screen.ProductDetailScreen.route)
+            ProductListingScreen(
+                selectedCategory = selectedCategory,
+                onCartClicked = onCartClicked,
+            ) {
+                navController.navigate(Screen.ProductDetailScreen.createRoute(it.id))
             }
         }
 
-        composable(route = Screen.ProductDetailScreen.route) {
-            ProductDetailScreen()
+        composable(
+            route = Screen.ProductDetailScreen.route,
+            arguments = listOf(navArgument("productId") { type = NavType.IntType }),
+        ) {
+            val productId = it.arguments?.getInt("productId")
+            if (productId != null) {
+                ProductDetailScreen(productId, onCartClicked = onCartClicked) {
+                    navController.popBackStack()
+                }
+            }
+        }
+
+        composable(route = Screen.CartScreen.route) {
+            CartScreen(
+                onBackClick = { navController.popBackStack() },
+            )
         }
     }
 }

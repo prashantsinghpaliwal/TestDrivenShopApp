@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import me.prashant.testdrivenshop.presentation.ui.theme.Typography
+import me.prashant.testdrivenshop.util.getRandomColor
 import kotlin.random.Random
 
 @Composable
@@ -74,18 +75,4 @@ fun ProductItemPreview() {
         imageUrl = "",
     ) {
     }
-}
-
-val colorList =
-    listOf(
-        "#71C1DA",
-        "#FDCBD6",
-        "#FCC8D4",
-        "#B5C9E6",
-        "#F5C0CA"
-    )
-
-fun getRandomColor(): Color {
-    val colorHex = colorList[Random.nextInt(colorList.size)]
-    return Color(android.graphics.Color.parseColor(colorHex))
 }

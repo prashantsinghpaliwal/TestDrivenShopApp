@@ -7,11 +7,11 @@ import dagger.hilt.components.SingletonComponent
 import me.prashant.testdrivenshop.data.mapper.CategoryDtoToCategoryMapper
 import me.prashant.testdrivenshop.data.mapper.ProductItemDTOToProductItemMapper
 import me.prashant.testdrivenshop.data.network.CategoryApiService
-import me.prashant.testdrivenshop.data.network.ProductListingApiService
+import me.prashant.testdrivenshop.data.network.ProductApiService
 import me.prashant.testdrivenshop.data.repo.CategoryRepositoryImpl
-import me.prashant.testdrivenshop.data.repo.ProductListingRepositoryImpl
+import me.prashant.testdrivenshop.data.repo.ProductRepositoryImpl
 import me.prashant.testdrivenshop.domain.repo.CategoryRepository
-import me.prashant.testdrivenshop.domain.repo.ProductListingRepository
+import me.prashant.testdrivenshop.domain.repo.ProductRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
+object RemoteDataModule {
     @Provides
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
@@ -53,8 +53,8 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideProductListingApiService(retrofit: Retrofit): ProductListingApiService =
-        retrofit.create(ProductListingApiService::class.java)
+    fun provideProductListingApiService(retrofit: Retrofit): ProductApiService =
+        retrofit.create(ProductApiService::class.java)
 
     @Provides
     @Singleton
@@ -66,7 +66,7 @@ object DataModule {
     @Provides
     @Singleton
     fun provideProductRepository(
-        productListingApiService: ProductListingApiService,
+        productApiService: ProductApiService,
         mapper: ProductItemDTOToProductItemMapper,
-    ): ProductListingRepository = ProductListingRepositoryImpl(productListingApiService, mapper)
+    ): ProductRepository = ProductRepositoryImpl(productApiService, mapper)
 }

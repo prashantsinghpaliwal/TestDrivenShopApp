@@ -25,8 +25,8 @@ import me.prashant.testdrivenshop.presentation.ui.screens.common.CustomToolbar
 @Composable
 fun ProductListingScreen(
     selectedCategory: CategoryUIModel,
-    categories: List<CategoryUIModel>,
-    viewModel: ProductViewModel = hiltViewModel(),
+    viewModel: ProductListingViewModel = hiltViewModel(),
+    onCartClicked: () -> Unit,
     onProductItemClick: (ProductItemUIModel) -> Unit,
 ) {
     val state by viewModel.state.collectAsState(initial = ProductListingScreenViewState.Loading(true))
@@ -42,7 +42,7 @@ fun ProductListingScreen(
                 title = selectedCategory.name,
                 rightIcon = R.drawable.shopping_bag,
                 onLeftIconClick = { /* Handle left icon click */ },
-                onRightIconClick = { /* Handle right icon click */ },
+                onRightIconClick = { onCartClicked() },
             )
         },
     ) { paddingValues ->

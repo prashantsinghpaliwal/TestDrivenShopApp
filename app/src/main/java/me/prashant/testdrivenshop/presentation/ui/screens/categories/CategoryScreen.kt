@@ -29,6 +29,7 @@ import me.prashant.testdrivenshop.presentation.ui.screens.common.SearchBar
 fun CategoryScreen(
     viewModel: CategoryViewModel = hiltViewModel(),
     onCategorySelected: (CategoryUIModel, List<CategoryUIModel>) -> Unit,
+    onCartClicked: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -42,7 +43,7 @@ fun CategoryScreen(
                 title = "Shop",
                 rightIcon = R.drawable.shopping_bag,
                 onLeftIconClick = { /* Handle left icon click */ },
-                onRightIconClick = { /* Handle right icon click */ },
+                onRightIconClick = { onCartClicked() },
             )
         },
     ) { paddingValues ->

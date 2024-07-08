@@ -23,15 +23,15 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class ProductViewModelTest {
-    private lateinit var viewModel: ProductViewModel
+class ProductListingViewModelTest {
+    private lateinit var viewModel: ProductListingViewModel
     private val useCase: GetProductListingUseCase = mockk()
     private val uiModelMapper: ProductUIModelMapper = mockk()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(StandardTestDispatcher())
-        viewModel = ProductViewModel(useCase, uiModelMapper)
+        viewModel = ProductListingViewModel(useCase, uiModelMapper)
     }
 
     @Test

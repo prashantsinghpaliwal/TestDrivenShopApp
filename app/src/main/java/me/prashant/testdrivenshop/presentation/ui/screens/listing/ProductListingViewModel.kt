@@ -15,7 +15,7 @@ import me.prashant.testdrivenshop.util.Resource
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductViewModel
+class ProductListingViewModel
     @Inject
     constructor(
         private val useCase: GetProductListingUseCase,
